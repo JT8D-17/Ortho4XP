@@ -11,6 +11,7 @@ import O4_Vector_Map as VMAP
 import O4_Imagery_Utils as IMG
 import O4_Tile_Utils as TILE
 import O4_Overlay_Utils as OVL
+import O4_Tooltip as TTP
 
 
 cfg_vars={
@@ -263,7 +264,12 @@ class Ortho4XP_Config(tk.Toplevel):
             row=1
             for item in sub_list:
                 text=item if 'short_name' not in cfg_vars[item] else cfg_vars[item]['short_name'] 
-                ttk.Button(self.frame_cfg,text=text,takefocus=False,command=lambda item=item: self.popup(item,cfg_vars[item]['hint'])).grid(row=row,column=col,padx=2,pady=2,sticky=E+W+N+S)
+
+                btn = None
+                btn = ttk.Button(self.frame_cfg,text=text,takefocus=False)
+                btn.grid(row=row,column=col,padx=2,pady=2,sticky=E+W+N+S)
+                btn_ttp = TTP.ToolTip(btn, cfg_vars[item]['hint'], 30, 30, 500)
+
                 if cfg_vars[item]['type']==bool or 'values' in cfg_vars[item]:
                     values=[True,False] if cfg_vars[item]['type']==bool else [str(x) for x in cfg_vars[item]['values']]
                     self.entry_[item]=ttk.Combobox(self.frame_cfg,values=values,textvariable=self.v_[item],width=6,state='readonly',style='O4.TCombobox')
@@ -277,7 +283,11 @@ class Ortho4XP_Config(tk.Toplevel):
         
         self.frame_dem.grid(row=row,column=0,columnspan=6,sticky=N+S+W+E)
         item='custom_dem'
-        ttk.Button(self.frame_dem,text=item,takefocus=False,command=lambda item=item: self.popup(item,cfg_vars[item]['hint'])).grid(row=0,column=0,padx=2,pady=2,sticky=E+W)
+        btn = None
+        btn = ttk.Button(self.frame_dem,text=item,takefocus=False)
+        btn.grid(row=0,column=0,padx=2,pady=2,sticky=E+W)
+        btn_ttp = TTP.ToolTip(btn, cfg_vars[item]['hint'], 30, 30, 500)
+
         #self.entry_[item]=tk.Entry(self.frame_dem,textvariable=self.v_[item],bg='white',fg='blue',width=80) 
         values=DEM.available_sources[1::2] 
         self.entry_[item]=ttk.Combobox(self.frame_dem,values=values,textvariable=self.v_[item],width=80,style='O4.TCombobox')
@@ -285,8 +295,14 @@ class Ortho4XP_Config(tk.Toplevel):
         dem_button=ttk.Button(self.frame_dem,image=self.folder_icon,command=self.choose_dem,style='Flat.TButton')
         dem_button.grid(row=0,column=2, padx=2, pady=0,sticky=W)
         dem_button.bind("<Shift-ButtonPress-1>", self.add_dem)
+        dem_button_ttp = TTP.ToolTip(dem_button, cfg_vars[item]['hint'], 30, 30, 500)
+
         item='fill_nodata'
-        ttk.Button(self.frame_cfg,text=item,takefocus=False,command=lambda item=item: self.popup(item,cfg_vars[item]['hint'])).grid(row=row,column=6,padx=2,pady=2,sticky=E+W)
+        btn = None
+        btn = ttk.Button(self.frame_cfg,text=item,takefocus=False)
+        btn.grid(row=row,column=6,padx=2,pady=2,sticky=E+W)
+        btn_ttp = TTP.ToolTip(btn, cfg_vars[item]['hint'], 30, 30, 500)
+
         values=[True,False] 
         self.entry_[item]=ttk.Combobox(self.frame_cfg,values=values,textvariable=self.v_[item],width=6,state='readonly',style='O4.TCombobox')
         self.entry_[item].grid(row=row,column=7,padx=2,pady=2,sticky=W)
@@ -302,7 +318,11 @@ class Ortho4XP_Config(tk.Toplevel):
             col=2*(j//l)
             row=this_row+j%l
             text=item if 'short_name' not in cfg_vars[item] else cfg_vars[item]['short_name'] 
-            ttk.Button(self.frame_cfg,text=text,takefocus=False,command=lambda item=item: self.popup(item,cfg_vars[item]['hint'])).grid(row=row,column=col,padx=2,pady=2,sticky=E+W+N+S)  
+            btn = None
+            btn = ttk.Button(self.frame_cfg,text=text,takefocus=False)
+            btn.grid(row=row,column=col,padx=2,pady=2,sticky=E+W+N+S)
+            btn_ttp = TTP.ToolTip(btn, cfg_vars[item]['hint'], 30, 30, 500)
+
             if cfg_vars[item]['type']==bool or 'values' in cfg_vars[item]:
                 values=['True','False'] if cfg_vars[item]['type']==bool else [str(x) for x in cfg_vars[item]['values']]
                 self.entry_[item]=ttk.Combobox(self.frame_cfg,values=values,textvariable=self.v_[item],width=6,state='readonly',style='O4.TCombobox')
@@ -314,10 +334,19 @@ class Ortho4XP_Config(tk.Toplevel):
         row=this_row+l
 
         for item in gui_app_vars_long:
-            ttk.Button(self.frame_cfg,text=item,takefocus=False,command=lambda item=item: self.popup(item,cfg_vars[item]['hint'])).grid(row=row,column=0,padx=2,pady=2,sticky=E+W+N+S)  
+            btn = None
+            btn = ttk.Button(self.frame_cfg,text=item,takefocus=False)
+            btn.grid(row=row,column=0,padx=2,pady=2,sticky=E+W+N+S)
+            btn_ttp = TTP.ToolTip(btn, cfg_vars[item]['hint'], 30, 30, 500)
+
             self.entry_[item]=tk.Entry(self.frame_cfg,textvariable=self.v_[item],bg='white',fg='blue') 
             self.entry_[item].grid(row=row,column=1,columnspan=5,padx=(2,0),pady=2,sticky=N+S+E+W)
-            ttk.Button(self.frame_cfg,image=self.folder_icon,command=lambda item=item: self.choose_dir(item),style='Flat.TButton').grid(row=row,column=6, padx=2, pady=0,sticky=N+S+W)
+
+            browse_btn = None
+            browse_btn = ttk.Button(self.frame_cfg,image=self.folder_icon,command=lambda item=item: self.choose_dir(item),style='Flat.TButton')
+            browse_btn.grid(row=row,column=6, padx=2, pady=0,sticky=N+S+W)
+
+            browse_btn_ttp = TTP.ToolTip(browse_btn, cfg_vars[item]['hint'], 30, 30, 500)
             row+=1
 
 
