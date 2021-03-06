@@ -55,7 +55,7 @@ elif 'win' in sys.platform:
     gdalwarp_cmd    = "gdalwarp.exe"
     devnull_rdir    = " > nul  2>&1"
 else:
-    dds_convert_cmd = "nvcompress" 
+    dds_convert_cmd = "convert" 
     gdal_transl_cmd = "gdal_translate"
     gdalwarp_cmd    = "gdalwarp"
     devnull_rdir    = " >/dev/null 2>&1 "
@@ -1423,9 +1423,13 @@ def convert_texture(tile,til_x_left,til_y_top,zoomlevel,provider_code,type='dds'
     # eventually the dds conversion
     if type=='dds':
         if not dxt5:
-            conv_cmd=[dds_convert_cmd,'-bc1','-fast',file_to_convert,os.path.join(tile.build_dir,'textures',out_file_name),devnull_rdir]
+            #conv_cmd=[dds_convert_cmd,'-bc1','-fast',file_to_convert,os.path.join(tile.build_dir,'textures',out_file_name),devnull_rdir]
+            conv_cmd=[dds_convert_cmd,'-format','dds','-define','dds:compression=dxt1',file_to_convert,os.path.join(tile.build_dir,'textures',out_file_name)]
+            #UI.lvprint(1,conv_cmd)
         else:
-            conv_cmd=[dds_convert_cmd,'-bc3','-fast',file_to_convert,os.path.join(tile.build_dir,'textures',out_file_name),devnull_rdir]
+            #conv_cmd=[dds_convert_cmd,'-bc3','-fast',file_to_convert,os.path.join(tile.build_dir,'textures',out_file_name),devnull_rdir]
+            conv_cmd=[dds_convert_cmd,'-format','dds','-define','dds:compression=dxt5',file_to_convert,os.path.join(tile.build_dir,'textures',out_file_name)]
+            #UI.lvprint(1,conv_cmd)
     else:
         (latmax,lonmin)=GEO.gtile_to_wgs84(til_x_left,til_y_top,zoomlevel)
         (latmin,lonmax)=GEO.gtile_to_wgs84(til_x_left+16,til_y_top+16,zoomlevel)
