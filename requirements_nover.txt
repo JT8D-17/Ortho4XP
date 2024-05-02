@@ -1,0 +1,11 @@
+certifi
+chardet
+idna
+numpy
+Pillow
+pyproj
+requests
+Rtree
+Shapely
+urllib3
+build
