@@ -14,15 +14,7 @@ source $path/bin/activate
 
 pip install -r $PWD/requirements_nover.txt
 
-# 4. Download scikit-fmm's "meson" branch, compile and install it
-
-git clone --branch meson https://github.com/scikit-fmm/scikit-fmm.git $path/scikit-fmm
-
-python -m build $path/scikit-fmm
-
-pip install $path/scikit-fmm
-
-# 6. DONE
+# 4. DONE
 
 echo " "
 echo "Preparation complete!"

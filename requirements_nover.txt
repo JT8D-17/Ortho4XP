@@ -9,3 +9,4 @@ Rtree
 Shapely
 urllib3
 build
+scikit-fmm
